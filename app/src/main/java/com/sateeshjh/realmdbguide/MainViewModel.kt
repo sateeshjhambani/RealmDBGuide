@@ -30,6 +30,10 @@ class MainViewModel : ViewModel() {
             emptyList()
         )
 
+    init {
+        createSampleEntries()
+    }
+
     private fun createSampleEntries() {
         viewModelScope.launch {
             realm.write {
