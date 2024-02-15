@@ -1,5 +1,8 @@
 package com.sateeshjh.realmdbguide
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sateeshjh.realmdbguide.models.Address
@@ -19,7 +22,18 @@ class MainViewModel : ViewModel() {
     private val realm = MyApp.realm
 
     val courses = realm
-        .query<Course>()
+        .query<Course>(
+            // get courses where one of the enrolled student's name is John Junior
+//            "enrolledStudents.name == $0",
+//            "John Junior"
+
+            // get courses with 2 or more students
+//            "enrolledStudents.@count >= 2"
+
+            // get courses where teacher's name contains John
+//            "teacher.address.fullName CONTAINS $0",
+//            "John"
+        )
         .asFlow()
         .map { results ->
             results.list.toList()
@@ -30,8 +44,31 @@ class MainViewModel : ViewModel() {
             emptyList()
         )
 
+    var courseDetails: Course? by mutableStateOf(null)
+        private set
+
     init {
         createSampleEntries()
+    }
+
+    fun showCourseDetails(course: Course) {
+        courseDetails = course
+    }
+
+    fun hideCourseDetails() {
+        courseDetails = null
+    }
+
+    fun deleteCourse() {
+        viewModelScope.launch {
+            realm.write {
+                val course = courseDetails ?: return@write
+                val latestCourse = findLatest(course) ?: return@write
+                delete(latestCourse)
+
+                courseDetails = null
+            }
+        }
     }
 
     private fun createSampleEntries() {
