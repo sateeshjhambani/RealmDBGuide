@@ -4,6 +4,8 @@ This repository serves as a guide for Mongo DB's Realm database for Android, in 
 
 Realm is a lightweight and much faster alternative to many popular ORMs like Room Database. The biggest difference between Realm and something like Room is that Realm is not SQL abstraction, the DB can be accessed directly without SQL injections. Instead of the relational model of Room, it is based on object store.
 
+![Main Board](https://github.com/sateeshjhambani/RealmDBGuide/assets/60574717/22d2faaa-0ed7-479a-9dd4-9227cb68b42f)
+
 ## Usage
 
 Realm Instance initialization, which takes the set of our objects (equivalent to entities in Room) 
